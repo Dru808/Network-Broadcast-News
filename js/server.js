@@ -23,7 +23,10 @@ const server = net.createServer((client) => {
   console.log('what is in room ', clientInfo.userName);
     }
     for(let i = 0; i < room.length; i++) {
-      room[i].connection.write(data);
+      if(room[i].connection !== client && room[i].userName !== null) {
+        room[i].connection.write(data);
+
+      }
 
     }
   });
