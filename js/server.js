@@ -12,22 +12,35 @@ const server = net.createServer((client) => {
   };
 
   room.push(clientInfo);
-
   client.write('Please enter user name with an "*" as the first Character');
 
-
   client.on('data', (data) => {
+
     console.log(data.toString());
+
+    //check if user wants to set username
     if(data.toString().charAt(0) === '*') {
-      clientInfo.userName = data.toString();
-  console.log('what is in room ', clientInfo.userName);
-    }
-    for(let i = 0; i < room.length; i++) {
-      if(room[i].connection !== client && room[i].userName !== null) {
-        room[i].connection.write(data);
+      //set username
+      clientInfo.userName = data.toString().trim();
+      let joinMessage = `${clientInfo.userName} has joined the room`;
+      console.log('who is in room ', clientInfo.userName);
 
+      //writes joinMessage to everyon except the person who wrote the message
+      for(let i = 0; i < room.length; i++) {
+        if(room[i].connection !== client && room[i].userName !== null) {
+          room[i].connection.write(joinMessage);
+        }
       }
+      return; //stops execution
+    }
 
+    for(let i = 0; i < room.length; i++) {
+
+      if(room[i].connection !== client && room[i].userName !== null) {
+
+        //while this code is in the for loop, the server writes to all users
+        room[i].connection.write(`${clientInfo.userName} says: ${data}`);
+      }
     }
   });
 });

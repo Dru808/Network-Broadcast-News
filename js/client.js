@@ -4,7 +4,7 @@ const net = require('net');
 process.stdin.setEncoding('utf8');
 
 const client = net.connect({port: 6969}, () => {
-  console.log('connected to da surber.....errrrr');
+  console.log('You are now connected to the server');
 
 
   process.stdin.on('data', (chunk) => {
